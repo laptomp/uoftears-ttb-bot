@@ -7,13 +7,21 @@ import { tearsClient } from "./client";
 /**
  * Get a sepcific course by course code.
  *
- * @param courseCode The course code being used to search for the course
+ * @param courseCode 	The course code being used to search for the course
+ * @param divisions		An array containing the academic divisions being searched
  * @returns A promise of a `Course` instance matching `courseCode`
  * @throws {AxiosError} When an error triggers during the request
  * @throws {Error} When a course with `courseCode` could not be found
  */
-export async function getCourse(courseCode: string): Promise<Course> {
-	const searchedCourses = await searchCourseByTerm(courseCode, ["20269", "20271", "20269-20271"]);
+export async function getCourse(
+	courseCode: string,
+	divisions: Array<AcademicDivision>,
+): Promise<Course> {
+	const searchedCourses = await searchCourseByTerm(
+		courseCode,
+		["20269", "20271", "20269-20271"],
+		divisions,
+	);
 
 	const searchedCourse: SearchedCourse = (() => {
 		for (const course of searchedCourses) {
@@ -34,7 +42,7 @@ export async function getCourse(courseCode: string): Promise<Course> {
 				searchCourseDescription: false,
 			},
 			departmentProps: [],
-			divisions: ["ARTSC"],
+			divisions: divisions,
 			page: 1,
 			pageSize: 20,
 			sessions: ["20269", "20271", "20269-20271"],
@@ -71,7 +79,7 @@ export async function getCourse(courseCode: string): Promise<Course> {
 export async function searchCourseByTerm(
 	term: string,
 	sessions: Array<string>,
-	divisions: Array<AcademicDivision> = ["ARTSC"],
+	divisions: Array<AcademicDivision>,
 ): Promise<Array<SearchedCourse>> {
 	const divisionsBody: string = divisions.join(",");
 
