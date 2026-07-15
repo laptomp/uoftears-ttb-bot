@@ -1,0 +1,13 @@
+{
+	"name": "teardrop",
+	"version": "1.0.0",
+	"description": "A rough API wrapper for the University of Toronto's Timetable Builder.",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs"
+}
