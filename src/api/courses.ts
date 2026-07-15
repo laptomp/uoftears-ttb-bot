@@ -1,4 +1,5 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { AcademicDivision } from "../types/academic-divison";
 import { Course } from "../types/course";
 import { SearchedCourse } from "../types/searched-course";
 import { tearsClient } from "./client";
@@ -8,6 +9,7 @@ import { tearsClient } from "./client";
  *
  * @param courseCode The course code being used to search for the course
  * @returns A promise of a `Course` instance matching `courseCode`
+ * @throws {AxiosError} When an error triggers during the request
  * @throws {Error} When a course with `courseCode` could not be found
  */
 export async function getCourse(courseCode: string): Promise<Course> {
@@ -64,18 +66,21 @@ export async function getCourse(courseCode: string): Promise<Course> {
  * @param sessions	The sessions the course is being searched in
  * @param divisions	The academic divisions hosting the courses
  * @returns A promise for an array of `SearchedCourse` instances representing the matched courses
+ * @throws {AxiosError} When an error triggers during the request
  */
 export async function searchCourseByTerm(
 	term: string,
 	sessions: Array<string>,
-	divisions: string = "ARTSC",
+	divisions: Array<AcademicDivision> = ["ARTSC"],
 ): Promise<Array<SearchedCourse>> {
+	const divisionsBody: string = divisions.join(",");
+
 	const response = await tearsClient
 		.get("/getOptimizedMatchingCourseTitles", {
 			params: {
 				term: term,
 				sessions: sessions,
-				divisions: divisions,
+				divisions: divisionsBody,
 				lowerThreshold: 50,
 				upperThreshold: 200,
 			},
