@@ -11,7 +11,7 @@ module.exports = {
 			option
 				.setName("code")
 				.setDescription("The course code for the course you are searching")
-				.setMinLength(1)
+				.setMinLength(6)
 				.setMaxLength(8)
 				.setRequired(true),
 		),
