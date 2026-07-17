@@ -14,6 +14,13 @@ export class CourseNotFoundError extends Error {
 	}
 }
 
+export class InvalidCourseCodeError extends Error {
+	constructor(courseCode: string) {
+		super(`Invalid course code provided: ${courseCode}`);
+		this.name = "InvalidCourseCodeError";
+	}
+}
+
 export class InvalidSectionNameError extends Error {
 	constructor(sectionName: string) {
 		super(`Invalid section name provided: ${sectionName}`);

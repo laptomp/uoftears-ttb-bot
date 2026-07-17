@@ -1,7 +1,7 @@
-import { Sequelize, DataTypes, UniqueConstraintError } from "sequelize";
+import { DataTypes, Sequelize, UniqueConstraintError } from "sequelize";
 import { Course } from "../types";
-import { CourseAlreadyExistsError, CourseNotFoundError } from "./errors";
 import { isValidCourseCode } from "../utils";
+import { CourseAlreadyExistsError, CourseNotFoundError, InvalidCourseCodeError } from "./errors";
 
 const sequelize = new Sequelize({
 	dialect: "sqlite",
@@ -23,7 +23,7 @@ const CourseTable = sequelize.define("Course", {
 		validate: {
 			isValidCode(value: string) {
 				if (!isValidCourseCode(value)) {
-					throw new Error(`Invalid course code: ${value}`);
+					throw new InvalidCourseCodeError(`Invalid course code: ${value}`);
 				}
 			},
 		},
