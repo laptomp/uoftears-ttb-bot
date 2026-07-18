@@ -8,8 +8,8 @@ export class CourseAlreadyExistsError extends Error {
 }
 
 export class CourseNotFoundError extends Error {
-	constructor(course: Course) {
-		super(`Course could not be found: ${course.code}`);
+	constructor(courseId: string) {
+		super(`Course could not be found: ${courseId}`);
 		this.name = "CourseAlreadyExistsError";
 	}
 }

@@ -1,13 +1,29 @@
-import { Message, User } from "discord.js";
+import { Message, User, InteractionCallbackResponse } from "discord.js";
 import { DataTypes, Sequelize } from "sequelize";
 import { Course } from "../types";
 import { InvalidSectionNameError } from "./errors";
+import { CourseDatabase } from "./course-database";
 
 const sequelize = new Sequelize({
 	dialect: "sqlite",
-	storage: "src/database/watch-database.ts",
+	storage: "src/database/watch-database.db",
 	logging: false,
 });
+
+export type IndividualWatch = {
+	id: number;
+	courseId: string;
+	sectionName: string;
+	userId: string;
+	alertChannelId: string;
+};
+
+export type ChannelWatch = {
+	id: number;
+	courseId: string;
+	messageId: string;
+	channelId: string;
+};
 
 const IndividualWatchTable = sequelize.define("IndividualWatches", {
 	id: {
@@ -60,6 +76,11 @@ const ChannelWatchTable = sequelize.define("ChannelWatches", {
 		unique: false,
 	},
 	messageId: {
+		type: DataTypes.STRING,
+		allowNull: false,
+		unique: false,
+	},
+	channelId: {
 		type: DataTypes.STRING,
 		allowNull: false,
 		unique: false,
@@ -120,6 +141,8 @@ export class WatchDatabase {
 		user: User,
 		alertChannelId: string,
 	): Promise<void> {
+		await CourseDatabase.addCourse(course).catch();
+
 		await IndividualWatchTable.create({
 			courseId: course.id,
 			sectionName: section,
@@ -132,12 +155,18 @@ export class WatchDatabase {
 	 * Add a watch entry to the `ChannelWatchTable`.
 	 *
 	 * @param course	The course being watched
-	 * @param message	The message containing the course section information
 	 */
-	static async addChannelWatch(course: Course, message: Message): Promise<void> {
+	static async addChannelWatch(
+		course: Course,
+		messageId: string,
+		channelId: string,
+	): Promise<void> {
+		await CourseDatabase.addCourse(course).catch();
+
 		await ChannelWatchTable.create({
 			courseId: course.id,
-			messageId: message.id,
+			messageId: messageId,
+			channelId: channelId,
 		});
 	}
 
@@ -162,9 +191,9 @@ export class WatchDatabase {
 	/**
 	 * Get all watches in the `IndividualWatchesTable`.
 	 *
-	 * @returns A promise of an array of objects representing the watches
+	 * @returns A promise of an array of `IndividualWatch` representing the watches
 	 */
-	static async getAllIndividualWatches(): Promise<Array<Object>> {
+	static async getAllIndividualWatches(): Promise<Array<IndividualWatch>> {
 		return (await IndividualWatchTable.findAll()).map((watch) => watch.dataValues);
 	}
 
@@ -172,9 +201,9 @@ export class WatchDatabase {
 	 * Get watches in the `IndividualWatchesTable` for a specific user
 	 *
 	 * @param user The user being searched for
-	 * @returns A promise of an array of objects representing the watches
+	 * @returns A promise of an array of `IndividualWatch` representing the watches
 	 */
-	static async getIndividualWatchesByUser(user: User): Promise<Array<Object>> {
+	static async getIndividualWatchesByUser(user: User): Promise<Array<IndividualWatch>> {
 		return (await IndividualWatchTable.findAll({ where: { userId: user.id } })).map(
 			(watch) => watch.dataValues,
 		);
@@ -184,9 +213,9 @@ export class WatchDatabase {
 	 * Get watches in the `IndividualWatchesTable` for a specific course
 	 *
 	 * @param course The course being searched for
-	 * @returns A promise of an array of objects representing the watches
+	 * @returns A promise of an array of `IndividualWatch` representing the watches
 	 */
-	static async getIndividualWatchesByCourse(course: Course): Promise<Array<Object>> {
+	static async getIndividualWatchesByCourse(course: Course): Promise<Array<IndividualWatch>> {
 		return (await IndividualWatchTable.findAll({ where: { courseId: course.id } })).map(
 			(watch) => watch.dataValues,
 		);
@@ -197,7 +226,7 @@ export class WatchDatabase {
 	 *
 	 * @returns A promise of an array of objects representing the watches
 	 */
-	static async getAllChannelWatches(): Promise<Array<Object>> {
+	static async getAllChannelWatches(): Promise<Array<ChannelWatch>> {
 		return (await ChannelWatchTable.findAll()).map((watch) => watch.dataValues);
 	}
 
@@ -205,9 +234,9 @@ export class WatchDatabase {
 	 * Get watches in the `ChannelWatchesTable` for a specific course
 	 *
 	 * @param course The course being searched for
-	 * @returns A promise of an array of objects representing the watches
+	 * @returns A promise of an array of `ChannelWatch` representing the watches
 	 */
-	static async getChannelWatchesByCourse(course: Course): Promise<Array<Object>> {
+	static async getChannelWatchesByCourse(course: Course): Promise<Array<ChannelWatch>> {
 		return (await ChannelWatchTable.findAll({ where: { courseId: course.id } })).map(
 			(watch) => watch.dataValues,
 		);

@@ -4,6 +4,8 @@ import fs from "fs";
 import path from "path";
 import { Command } from "./bot/types/Command";
 import { deployCommands } from "./bot/deploy-commands";
+import { CourseDatabase } from "./database";
+import { WatchDatabase } from "./database/watch-database";
 
 declare module "discord.js" {
 	export interface Client {
@@ -22,6 +24,12 @@ if (!SECRET || !TOKEN) {
 	console.log("Missing required credentials in .env");
 	process.exit(1);
 }
+
+/* -- Database Startup -- */
+(async () => {
+	await CourseDatabase.synchronizeTable(false, true);
+	await WatchDatabase.synchronizeAll(false, true);
+})();
 
 /* -- Client Setup -- */
 
@@ -74,6 +82,6 @@ fs.readdirSync(eventsFolderPath).map((eventFile) => {
 (async () => {
 	console.log("Deploying commands...");
 	await deployCommands();
-	console.log("Commands deploying.\nLogging into client...");
+	console.log("Commands deploying.\nLogging into client.");
 	await discordClient.login(TOKEN);
 })();
