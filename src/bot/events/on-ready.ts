@@ -1,4 +1,12 @@
-import { AttachmentBuilder, Channel, Client, EmbedBuilder, Events, TextChannel } from "discord.js";
+import {
+	AttachmentBuilder,
+	Channel,
+	Client,
+	DiscordAPIError,
+	EmbedBuilder,
+	Events,
+	TextChannel,
+} from "discord.js";
 import { getCourse } from "../../api";
 import { CourseDatabase } from "../../database";
 import { CourseEntry } from "../../database/course-database";
@@ -40,7 +48,18 @@ module.exports = {
 								watch.alertChannelId,
 							);
 
-							if (!channel) return;
+							if (!channel) {
+								try {
+									const channel: Channel = await (
+										await client.users.fetch(watch.userId)
+									).createDM();
+									await channel.send(
+										`❗ Your alert for **${courseSection.name}** for **${course.code}: ${course.name}** is being removed due to the specified alert channel being made inaccessible to the Bucket client.`,
+									);
+									await WatchDatabase.removeIndividualWatch(watch.id);
+								} catch {}
+								return;
+							}
 
 							if (channel.isSendable()) {
 								const embedAlert = getCourseSectionEmbed(course, courseSection);
@@ -62,14 +81,27 @@ module.exports = {
 							if (channel?.isTextBased()) {
 								const replyContent: [EmbedBuilder, AttachmentBuilder] =
 									await getCourseSectionsEmbed(course);
-								(await channel.messages.fetch(watch.messageId)).edit({
-									content: `Last updated <t:${Math.trunc(Date.now() / 1000)}:R>`,
-									embeds: [replyContent[0]],
-									files: [replyContent[1]],
-									components: [],
-								});
+								try {
+									(await channel.messages.fetch(watch.messageId)).edit({
+										content: `Last updated <t:${Math.trunc(Date.now() / 1000)}:R>`,
+										embeds: [replyContent[0]],
+										files: [replyContent[1]],
+										components: [],
+									});
+								} catch (error) {
+									if (
+										error instanceof DiscordAPIError &&
+										error.message === "Unknown Message"
+									) {
+										await WatchDatabase.removeChannelWatch(watch.id);
+										return;
+									}
+								}
 							}
-							if (!channel) return;
+							if (!channel) {
+								await WatchDatabase.removeChannelWatch(watch.id);
+								return;
+							}
 						}),
 				);
 			}
