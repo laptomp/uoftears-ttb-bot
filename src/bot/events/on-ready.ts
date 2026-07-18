@@ -1,10 +1,10 @@
-import { AttachmentBuilder, Client, EmbedBuilder, Events } from "discord.js";
+import { AttachmentBuilder, Channel, Client, EmbedBuilder, Events, TextChannel } from "discord.js";
 import { getCourse } from "../../api";
 import { CourseDatabase } from "../../database";
 import { CourseEntry } from "../../database/course-database";
-import { ChannelWatch, WatchDatabase } from "../../database/watch-database";
-import { Course } from "../../types";
-import { getCourseSectionsEmbed } from "../components/embeds";
+import { ChannelWatch, IndividualWatch, WatchDatabase } from "../../database/watch-database";
+import { Course, CourseSection } from "../../types";
+import { getCourseSectionEmbed, getCourseSectionsEmbed } from "../components/embeds";
 
 module.exports = {
 	name: Events.ClientReady,
@@ -28,6 +28,33 @@ module.exports = {
 
 			for (const course of uniqueCourses) {
 				await Promise.all(
+					individualWatches
+						.filter((watch: IndividualWatch) => watch.courseId === course.id)
+						.map(async (watch) => {
+							const courseSection: CourseSection = course.sections.find(
+								(s) => s.name === watch.sectionName,
+							)!;
+							if (courseSection.currentEnrolment >= courseSection.maxEnrolment)
+								return;
+							const channel: Channel | null = await client.channels.fetch(
+								watch.alertChannelId,
+							);
+
+							if (!channel) return;
+
+							if (channel.isSendable()) {
+								const embedAlert = getCourseSectionEmbed(course, courseSection);
+								try {
+									await channel.send({
+										content: `<@${watch.userId}> there is an opening in **${watch.sectionName}** of **${course.code}: ${course.name}**`,
+										embeds: [embedAlert.setColor("Yellow")],
+									});
+									await WatchDatabase.removeIndividualWatch(watch.id);
+								} catch {}
+							}
+						}),
+				);
+				await Promise.all(
 					channelWatches
 						.filter((watch: ChannelWatch) => watch.courseId === course.id)
 						.map(async (watch) => {
@@ -47,7 +74,7 @@ module.exports = {
 				);
 			}
 
-			setTimeout(watchSweep, 30000);
+			setTimeout(watchSweep, 5000);
 		};
 
 		watchSweep();

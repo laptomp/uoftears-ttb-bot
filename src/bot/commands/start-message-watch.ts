@@ -11,7 +11,7 @@ import { getCourse } from "../../api";
 import { WatchDatabase } from "../../database/watch-database";
 import { Course, CourseSection } from "../../types";
 import { getCancelButton, getConfirmationButton } from "../components/buttons";
-import { getCourseSectionsEmbed } from "../components/embeds";
+import { getCourseSectionsEmbed, timedOutEmbed } from "../components/embeds";
 
 module.exports = {
 	command: new SlashCommandBuilder()
@@ -113,6 +113,7 @@ module.exports = {
 			}
 		} catch {
 			await cancelEmbedResponse();
+			await userCommand.followUp({ embeds: [timedOutEmbed()] });
 		}
 	},
 };

@@ -141,7 +141,7 @@ export class WatchDatabase {
 		user: User,
 		alertChannelId: string,
 	): Promise<void> {
-		await CourseDatabase.addCourse(course).catch();
+		await CourseDatabase.addCourse(course).catch(() => {});
 
 		await IndividualWatchTable.create({
 			courseId: course.id,
@@ -161,7 +161,7 @@ export class WatchDatabase {
 		messageId: string,
 		channelId: string,
 	): Promise<void> {
-		await CourseDatabase.addCourse(course).catch();
+		await CourseDatabase.addCourse(course).catch(() => {});
 
 		await ChannelWatchTable.create({
 			courseId: course.id,
