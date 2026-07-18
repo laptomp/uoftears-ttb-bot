@@ -22,7 +22,10 @@ export type CourseSection = {
 		repitition: string;
 		repititionTime: string;
 	}>;
-	instructors: string[];
+	instructors: Array<{
+		firstName: string;
+		lastName: string;
+	}>;
 	currentEnrolment: number;
 	maxEnrolment: number;
 	subTitle: string;

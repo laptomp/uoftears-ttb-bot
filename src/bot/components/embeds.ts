@@ -91,3 +91,17 @@ export async function getCourseSectionsEmbed(
 
 	return [embedResponse, image];
 }
+
+export function getCourseSectionEmbed(course: Course, section: CourseSection): EmbedBuilder {
+	const descriptionContent = `Offered during the ${course.sectionCode === "F" ? "Fall" : "Winter"} session`;
+	const fieldName = `${section.name} ${section.teachMethod === "LEC" ? "📚" : section.teachMethod === "TUT" ? "✍️" : "🔬"}`;
+	let fieldContent =
+		section.instructors.length > 0
+			? `**Instructors**: ${section.instructors.map((i) => `${i.firstName} ${i.lastName}`).join(", ")}`
+			: "**Instructors**: N/A";
+	fieldContent += `\n**Spaces**: ${section.maxEnrolment - section.currentEnrolment}/${section.maxEnrolment}`;
+	return new EmbedBuilder()
+		.setTitle(`${course.code}: ${course.name}`)
+		.setDescription(descriptionContent)
+		.addFields({ name: fieldName, value: fieldContent });
+}
