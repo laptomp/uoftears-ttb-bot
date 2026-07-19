@@ -26,10 +26,6 @@ module.exports = {
 				.setRequired(true),
 		),
 	async execute(userCommand: ChatInputCommandInteraction) {
-		if (userCommand.user.id !== "530824540113338368") {
-			return;
-		}
-
 		const response = await userCommand.reply("Processing...");
 
 		const givenCourseCode = userCommand.options.getString("code");
