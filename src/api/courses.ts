@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import { AcademicDivision } from "../types/academic-divison";
 import { Course } from "../types/course";
 import { SearchedCourse } from "../types/searched-course";
-import { tearsClient } from "./client";
+import { getClient } from "./client";
 
 /**
  * Get a sepcific course by course code.
@@ -32,7 +32,7 @@ export async function getCourse(
 		throw new Error(`Course with courseCode '${courseCode}' could not be found`);
 	})();
 
-	const courses = await tearsClient
+	const courses = await getClient()
 		.post("/getPageableCourses", {
 			availableSpace: false,
 			courseCodeAndTitleProps: {
@@ -70,7 +70,7 @@ export async function searchCourseByTerm(
 ): Promise<Array<SearchedCourse>> {
 	const divisionsBody: string = divisions.join(",");
 
-	const response = await tearsClient
+	const response = await getClient()
 		.get("/getOptimizedMatchingCourseTitles", {
 			params: {
 				term: term,

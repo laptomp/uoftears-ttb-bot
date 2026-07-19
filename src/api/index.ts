@@ -1,2 +1,2 @@
-export { tearsClient } from "./client";
+export { getClient } from "./client";
 export * from "./courses";
