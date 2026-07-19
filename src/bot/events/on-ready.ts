@@ -106,7 +106,7 @@ module.exports = {
 				);
 			}
 
-			setTimeout(watchSweep, 5000);
+			setTimeout(watchSweep, 30000);
 		};
 
 		watchSweep();
