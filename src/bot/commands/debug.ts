@@ -1,9 +1,10 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import config from "../../config";
 
 module.exports = {
 	command: new SlashCommandBuilder().setName("start-debugger").setDescription("Starts debugging"),
 	async execute(userCommand: ChatInputCommandInteraction) {
-		if (userCommand.user.id !== "530824540113338368") {
+		if (config.developerIds.includes(userCommand.user.id)) {
 			await userCommand.reply("You are not permitted to use this command.");
 			return;
 		}

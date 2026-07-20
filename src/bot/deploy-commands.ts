@@ -2,14 +2,10 @@ import { REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+import config from "../config";
 
 export async function deployCommands() {
-	const BOT_TOKEN: string | undefined = process.env.BOT_TOKEN;
-
-	if (!BOT_TOKEN) {
-		console.log("Client token missing, cannot deploy commands");
-		process.exit(1);
-	}
+	const TOKEN: string = process.env.TOKEN!;
 
 	const commands: Array<any> = [];
 
@@ -29,12 +25,12 @@ export async function deployCommands() {
 			}
 		});
 
-    console.log(commands);
+	console.log(commands);
 
-	const rest: REST = new REST().setToken(BOT_TOKEN);
+	const rest: REST = new REST().setToken(TOKEN);
 
 	try {
-		await rest.put(Routes.applicationCommands("1527181018208014356"), { body: commands });
+		await rest.put(Routes.applicationCommands(config.clientId), { body: commands });
 	} catch (error) {
 		console.log(`Something went wrong while uploading commands: ${error}`);
 		process.exit(1);
