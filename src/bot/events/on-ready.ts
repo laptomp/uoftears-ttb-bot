@@ -10,7 +10,7 @@ import { getCourse } from "../../api";
 import { CourseDatabase } from "../../database";
 import { CourseEntry } from "../../database/course-database";
 import { ChannelWatch, IndividualWatch, WatchDatabase } from "../../database/watch-database";
-import { Course, CourseSection } from "../../api/types";
+import { Course, CourseSection } from "../../api";
 import { getCourseSectionEmbed, getCourseSectionsEmbed } from "../components/embeds";
 
 module.exports = {

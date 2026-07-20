@@ -1,4 +1,4 @@
-import { CourseSection } from "../api/types";
+import { CourseSection } from "../api";
 
 export function sortSections(sections: Array<CourseSection>): Array<CourseSection> {
 	const methodOrder: Record<string, string> = { LEC: "0", TUT: "1", PRAC: "2" };

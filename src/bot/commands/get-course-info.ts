@@ -5,7 +5,7 @@ import {
 	SlashCommandBuilder,
 } from "discord.js";
 import { getCourse } from "../../api";
-import { Course } from "../../api/types";
+import { Course } from "../../api";
 import { getCourseSectionsEmbed } from "../components/embeds";
 
 module.exports = {

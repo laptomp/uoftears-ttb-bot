@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize, UniqueConstraintError } from "sequelize";
-import { Course } from "../api/types";
+import { Course } from "../api";
 import { isValidCourseCode } from "../utils";
 import { CourseAlreadyExistsError, CourseNotFoundError, InvalidCourseCodeError } from "./errors";
 

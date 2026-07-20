@@ -1,6 +1,6 @@
 import { User } from "discord.js";
 import { DataTypes, Sequelize } from "sequelize";
-import { Course } from "../api/types";
+import { Course } from "../api";
 import { CourseDatabase } from "./course-database";
 import { InvalidSectionNameError } from "./errors";
 
