@@ -4,13 +4,13 @@ import {
 	Client,
 	DiscordAPIError,
 	EmbedBuilder,
-	Events
+	Events,
 } from "discord.js";
 import { getCourse } from "../../api";
 import { CourseDatabase } from "../../database";
 import { CourseEntry } from "../../database/course-database";
 import { ChannelWatch, IndividualWatch, WatchDatabase } from "../../database/watch-database";
-import { Course, CourseSection } from "../../types";
+import { Course, CourseSection } from "../../api/types";
 import { getCourseSectionEmbed, getCourseSectionsEmbed } from "../components/embeds";
 
 module.exports = {

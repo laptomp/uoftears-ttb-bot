@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 import { getCourse } from "../../api";
 import { WatchDatabase } from "../../database/watch-database";
-import { Course, CourseSection } from "../../types";
+import { Course, CourseSection } from "../../api/types";
 import { getCancelButton, getConfirmationButton } from "../components/buttons";
 import { getCourseSectionsEmbed, timedOutEmbed } from "../components/embeds";
 

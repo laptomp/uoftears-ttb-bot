@@ -1,5 +1,5 @@
 import { AttachmentBuilder, EmbedBuilder } from "discord.js";
-import { Course, CourseSection } from "../../types";
+import { Course, CourseSection } from "../../api/types";
 import { sortSections } from "../../utils";
 
 export async function getCourseSectionsEmbed(

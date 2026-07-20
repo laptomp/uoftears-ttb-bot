@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
-import { AcademicDivision } from "../types/academic-divison";
-import { Course } from "../types/course";
-import { SearchedCourse } from "../types/searched-course";
+import { AcademicDivision } from "./types/academic-divison";
+import { Course } from "./types/course";
+import { SearchedCourse } from "./types/searched-course";
 import { getClient } from "./client";
 
 /**
