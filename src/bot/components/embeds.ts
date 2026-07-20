@@ -51,7 +51,7 @@ export async function getCourseSectionsEmbed(
 		addingString += ` **${section.name}**`;
 		addingString += ` with ${spots}/${section.maxEnrolment} spots remaining`;
 		if (section.currentWaitlist > 0) {
-			addingString = ` and a waitlist of ${section.currentWaitlist}`;
+			addingString += ` and a waitlist of ${section.currentWaitlist}`;
 		}
 
 		const currentFieldString = fieldContents[fieldTracker[section.teachMethod]]["value"];
