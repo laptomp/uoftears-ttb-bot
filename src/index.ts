@@ -6,6 +6,7 @@ import { Command } from "./bot/types/Command";
 import { deployCommands } from "./bot/deploy-commands";
 import { CourseDatabase } from "./database";
 import { WatchDatabase } from "./database/watch-database";
+import config from "./config";
 
 declare module "discord.js" {
 	export interface Client {
@@ -15,12 +16,9 @@ declare module "discord.js" {
 
 /* -- Environment Variables Check -- */
 
-dotenv.config({ debug: false });
+dotenv.config({ debug: false, quiet: true });
 
-const SECRET: string | undefined = process.env.BOT_SECRET;
-const TOKEN: string | undefined = process.env.BOT_TOKEN;
-
-if (!SECRET || !TOKEN) {
+if (!config.clientId || !process.env.CLIENT_SECRET || !process.env.TOKEN) {
 	console.log("Missing required credentials in .env");
 	process.exit(1);
 }
@@ -83,5 +81,5 @@ fs.readdirSync(eventsFolderPath).map((eventFile) => {
 	console.log("Deploying commands...");
 	await deployCommands();
 	console.log("Commands deploying.\nLogging into client.");
-	await discordClient.login(TOKEN);
+	await discordClient.login(process.env.TOKEN);
 })();

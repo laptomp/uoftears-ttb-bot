@@ -1,12 +1,13 @@
 import { Message, User } from "discord.js";
 import { Events } from "discord.js";
+import config from "../../config";
 
 module.exports = {
 	name: Events.MessageCreate,
 
 	async execute(message: Message) {
 		message.mentions.users.map((user: User) => {
-			if (user.id === "1527181018208014356") {
+			if (user.id === config.clientId) {
 				message.react("💧");
 			}
 		});
