@@ -1,8 +1,8 @@
-import { Message, User, InteractionCallbackResponse } from "discord.js";
+import { User } from "discord.js";
 import { DataTypes, Sequelize } from "sequelize";
-import { Course } from "../types";
-import { InvalidSectionNameError } from "./errors";
+import { Course } from "../api";
 import { CourseDatabase } from "./course-database";
+import { InvalidSectionNameError } from "./errors";
 
 const sequelize = new Sequelize({
 	dialect: "sqlite",

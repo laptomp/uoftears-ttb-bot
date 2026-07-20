@@ -1,5 +1,4 @@
-import { Message, User } from "discord.js";
-import { Events } from "discord.js";
+import { Events, Message, User } from "discord.js";
 import config from "../../config";
 
 module.exports = {

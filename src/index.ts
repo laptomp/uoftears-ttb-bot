@@ -2,11 +2,11 @@ import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { Command } from "./bot/types/Command";
 import { deployCommands } from "./bot/deploy-commands";
+import { Command } from "./bot/types/Command";
+import config from "./config";
 import { CourseDatabase } from "./database";
 import { WatchDatabase } from "./database/watch-database";
-import config from "./config";
 
 declare module "discord.js" {
 	export interface Client {

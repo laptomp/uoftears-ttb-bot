@@ -1,4 +1,4 @@
-import { Course } from "../types";
+import { Course } from "../api";
 
 export class CourseAlreadyExistsError extends Error {
 	constructor(course: Course) {

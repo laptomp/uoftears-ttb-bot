@@ -24,7 +24,7 @@ module.exports = {
 		} catch (error) {
 			if (interaction.replied || interaction.deferred) {
 				interaction.followUp("Something went wrong while executing this command.");
-                console.log(error);
+				console.log(error);
 			} else {
 				interaction.reply("Something went wrong while executing this command.");
 			}

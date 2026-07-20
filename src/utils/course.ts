@@ -1,4 +1,4 @@
-import { Course } from "../types";
+import { Course } from "../api";
 
 export function isValidFullCourseCode(code: string): boolean {
 	const pattern = /^(\w{3}\d{3}[HY][135]|\w{3}[ABCD]\d{2}[HY]3)$/;

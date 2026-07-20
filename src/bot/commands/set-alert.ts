@@ -1,20 +1,18 @@
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
-	ButtonInteraction,
 	ButtonStyle,
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	Interaction,
-	Message,
 	MessageActionRowComponentBuilder,
 	SlashCommandBuilder,
 } from "discord.js";
 import { getCourse } from "../../api";
-import { Course, CourseSection } from "../../types";
+import { WatchDatabase } from "../../database/watch-database";
+import { Course, CourseSection } from "../../api";
 import { isExistingSection } from "../../utils";
 import { getCancelButton } from "../components/buttons";
-import { WatchDatabase } from "../../database/watch-database";
 import { getCourseSectionEmbed, timedOutEmbed } from "../components/embeds";
 
 module.exports = {
