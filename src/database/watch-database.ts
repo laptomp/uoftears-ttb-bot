@@ -6,7 +6,7 @@ import { InvalidSectionNameError } from "./errors";
 
 const sequelize = new Sequelize({
 	dialect: "sqlite",
-	storage: "src/database/watch-database.db",
+	storage: "db/watch-database.db",
 	logging: false,
 });
 
