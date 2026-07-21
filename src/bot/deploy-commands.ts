@@ -25,7 +25,7 @@ export async function deployCommands() {
 			}
 		});
 
-	console.log(commands);
+	console.log(commands.map((command) => command.name).join(", "));
 
 	const rest: REST = new REST().setToken(TOKEN);
 

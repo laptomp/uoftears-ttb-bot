@@ -5,7 +5,7 @@ import { CourseAlreadyExistsError, CourseNotFoundError, InvalidCourseCodeError }
 
 const sequelize = new Sequelize({
 	dialect: "sqlite",
-	storage: "src/database/course-database.db",
+	storage: "db/course-database.db",
 	logging: false,
 });
 
