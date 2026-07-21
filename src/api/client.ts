@@ -21,7 +21,6 @@ tearsClient.interceptors.response.use(
 		const status = error.response?.status;
 
 		const isRateLimited = status === 429;
-		if (isRateLimited) console.log("Rate-limit detected. Retrying request in 1000ms...");
 
 		const shouldRetry =
 			isRateLimited ||
@@ -32,12 +31,13 @@ tearsClient.interceptors.response.use(
 
 		config._retryCount = config._retryCount ?? 0;
 
-		if (config._retryCount++ === 3) return Promise.reject(error);
+		// if (config._retryCount++ === 3) return Promise.reject(error);
 
 		// Exponential backoff
-		const backoff = 200 * 2 ** config._retryCount;
+		const backoff = config._retryCount > 5 ? 200 * 2 ** config._retryCount : 6400;
 		if (!isRateLimited)
 			console.log(`Internal server error detected. Retrying request in ${backoff}ms...`);
+		else console.log(`Ratelimiting detected. Retrying request in ${backoff}ms...`);
 		await new Promise((resolve) => setTimeout(resolve, backoff));
 
 		return tearsClient(config);
