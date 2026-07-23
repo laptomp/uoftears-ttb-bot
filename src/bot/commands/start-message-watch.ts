@@ -3,13 +3,13 @@ import {
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	Interaction,
+	InteractionContextType,
 	Message,
 	MessageActionRowComponentBuilder,
 	SlashCommandBuilder,
 } from "discord.js";
-import { getCourse } from "../../api";
+import { Course, CourseSection, getCourse } from "../../api";
 import { WatchDatabase } from "../../database/watch-database";
-import { Course, CourseSection } from "../../api";
 import { getCancelButton, getConfirmationButton } from "../components/buttons";
 import { getCourseSectionsEmbed, timedOutEmbed } from "../components/embeds";
 
@@ -24,7 +24,12 @@ module.exports = {
 				.setMinLength(6)
 				.setMaxLength(8)
 				.setRequired(true),
-		),
+		)
+		.setContexts([
+			InteractionContextType.Guild,
+			InteractionContextType.BotDM,
+			InteractionContextType.PrivateChannel,
+		]),
 	async execute(userCommand: ChatInputCommandInteraction) {
 		const response = await userCommand.reply("Processing...");
 

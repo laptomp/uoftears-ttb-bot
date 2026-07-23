@@ -2,6 +2,7 @@ import {
 	AttachmentBuilder,
 	ChatInputCommandInteraction,
 	EmbedBuilder,
+	InteractionContextType,
 	SlashCommandBuilder,
 } from "discord.js";
 import { getCourse } from "../../api";
@@ -19,7 +20,11 @@ module.exports = {
 				.setMinLength(6)
 				.setMaxLength(8)
 				.setRequired(true),
-		),
+		).setContexts([
+					InteractionContextType.Guild,
+					InteractionContextType.BotDM,
+					InteractionContextType.PrivateChannel,
+				]),
 	async execute(userCommand: ChatInputCommandInteraction) {
 		const givenCourseCode = userCommand.options.getString("code");
 

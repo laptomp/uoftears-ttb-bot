@@ -5,6 +5,7 @@ import {
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	Interaction,
+	InteractionContextType,
 	MessageActionRowComponentBuilder,
 	SlashCommandBuilder,
 } from "discord.js";
@@ -34,7 +35,11 @@ module.exports = {
 				.setMinLength(4)
 				.setMaxLength(7)
 				.setRequired(true),
-		),
+		).setContexts([
+					InteractionContextType.Guild,
+					InteractionContextType.BotDM,
+					InteractionContextType.PrivateChannel,
+				]),
 	async execute(userCommand: ChatInputCommandInteraction) {
 		const response = await userCommand.reply("Processing...");
 
