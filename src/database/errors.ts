@@ -10,7 +10,7 @@ export class CourseAlreadyExistsError extends Error {
 export class CourseNotFoundError extends Error {
 	constructor(courseId: string) {
 		super(`Course could not be found: ${courseId}`);
-		this.name = "CourseAlreadyExistsError";
+		this.name = "CourseNotFoundError";
 	}
 }
 
